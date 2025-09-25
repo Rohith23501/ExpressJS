@@ -1,31 +1,14 @@
 const express = require('express');
 
+const planetController = require('./controllers/planets.controller.js');
+const messagesController = require('./controllers/messages.controller.js');
+
 const app = express();
 
 const PORT = 3000;
 
 
-const planets = [
-    {id: 0, name: "Mercury", 
-    remarks: "The smallest planet in our solar system and nearest to the Sun."},
-    {id: 1, name: "Venus", 
-        remarks: "Second planet from the Sun and is Earth's closest planetary neighbor."},
-    {id: 2, name: "Earth", 
-        remarks: "Our own home planet"},
-    {id: 3, name: "Mars", 
-        remarks: "The Red Planet is dusty, cold world with a thin atmosphere and is home to four NASA robots."},
-    {id: 4, name: "Jupiter", 
-        remarks: "The largest planet in our solar system and fifth from the Sun."  },
-    {id: 5, name: "Saturn",
-         remarks: "Adorned with a dazzling, complex system of icy rings, Saturn is the sixth planet from the Sun and the second-largest planet in our solar system."},
-    {id: 6, name: "Uranus", 
-        remarks: "The seventh planet from the Sun, Uranus is a cold, windy world that rotates on its side." },
 
-    {id: 7, name: "Neptune",
-        remarks: "The eighth and most distant planet in our solar system, Neptune is a cold, dark world nearly 3 billion miles from the Sun."},
-    {id: 8, name: "Pluto", 
-        remarks: "A complex and mysterious world with a heart-shaped glacier the size of Texas and Oklahoma."},
-]
 
 app.use((req, res, next) => {
     const start = Date.now();
@@ -41,45 +24,19 @@ app.get('/', (req, res) => {
     res.send('Hello, World!');
 });
 
-app.get('/planets', (req, res) => {
-    res.json(planets);   
-});
+const friendsRouter = express.Router();
 
-app.post('/planets', (req, res) => {
-    if (!req.body.name) {
-        return res.status(400).json({ error: 'Planet name is required' });
-        
-    };
-    const newPlanet = {
-        id : planets.length,
-        name : req.body.name,
-        remarks : req.body.remarks 
-    }
-    planets.push(newPlanet);
-    res.json(newPlanet);
-});
 
-app.get('/planets/:id', (req, res) => {
-    const planetId = parseInt(req.params.id, 10);
-    const planet = planets[planetId];
-    if (planet) {
-        res.json(planet);
-    }
-    else{
-        res.status(404).json({ error: `Planet not found` +
-            ` in our solar system` });
-    };
-});
+friendsRouter.get('/', planetController.getPlanets);
+friendsRouter.get('/:id', planetController.getPlanet);
+friendsRouter.post('/', planetController.postPlanet);
 
-app.get('/messages', (req, res) => {
-    res.json({ message: 'This is the messages endpoint' });
-});
+app.use('/planets', friendsRouter);
 
-app.post('/messages', (req, res) => {
+app.get('/messages', 
+    messagesController.getMessages);
+app.post('/messages', messagesController.postMessages); 
 
-    
-    res.json({ message: 'Message received' });
-}); 
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
