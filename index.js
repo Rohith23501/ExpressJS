@@ -34,12 +34,29 @@ app.use((req, res, next) => {
     next();
     console.log(`Request took ${Date.now() - start}ms`);
 });
+
+app.use(express.json());
+
 app.get('/', (req, res) => {
     res.send('Hello, World!');
 });
 
 app.get('/planets', (req, res) => {
     res.json(planets);   
+});
+
+app.post('/planets', (req, res) => {
+    if (!req.body.name) {
+        return res.status(400).json({ error: 'Planet name is required' });
+        
+    };
+    const newPlanet = {
+        id : planets.length,
+        name : req.body.name,
+        remarks : req.body.remarks 
+    }
+    planets.push(newPlanet);
+    res.json(newPlanet);
 });
 
 app.get('/planets/:id', (req, res) => {
@@ -59,6 +76,8 @@ app.get('/messages', (req, res) => {
 });
 
 app.post('/messages', (req, res) => {
+
+    
     res.json({ message: 'Message received' });
 }); 
 
