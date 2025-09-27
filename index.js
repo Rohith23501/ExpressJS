@@ -1,7 +1,7 @@
 const express = require('express');
 
-const planetController = require('./controllers/planets.controller.js');
-const messagesController = require('./controllers/messages.controller.js');
+const planetRouter = require('./routes/planets.router.js');
+const messagesRouter = require('./routes/messages.router.js');
 
 const app = express();
 
@@ -24,18 +24,9 @@ app.get('/', (req, res) => {
     res.send('Hello, World!');
 });
 
-const friendsRouter = express.Router();
+app.use('/planets', planetRouter);
+app.use('/messages', messagesRouter);
 
-
-friendsRouter.get('/', planetController.getPlanets);
-friendsRouter.get('/:id', planetController.getPlanet);
-friendsRouter.post('/', planetController.postPlanet);
-
-app.use('/planets', friendsRouter);
-
-app.get('/messages', 
-    messagesController.getMessages);
-app.post('/messages', messagesController.postMessages); 
 
 
 app.listen(PORT, () => {
