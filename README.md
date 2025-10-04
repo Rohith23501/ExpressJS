@@ -1,4 +1,4 @@
-A Project done to reflect on and practice the learnings of Express JS
+A Project done to reflect on and practice the learnings of Express JS with MVC Architecture
 
 Express.js is a minimal and flexible Node.js framework that simplifies server setup, request handling, and routing. It uses middleware to process requests, parse data, handle errors, and send responses efficiently. Its modular design and rich ecosystem make it ideal for building scalable web apps and APIs.
 
